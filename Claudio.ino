@@ -542,7 +542,10 @@ void playBuzzer(int times){
       digitalWrite(BUZZER, LOW);
       delay(1);
     }
+    //Read touch sensor to check if alarm is stopped manually
     readTouch();
+    //Check if remote management is requested (to stop alarm remotely)
+    configMode();
     delay(10);
   }
 }
@@ -689,7 +692,7 @@ void readTouch(){
  * Event for change of time HH:MM
  */
 void timeChanged(String prevTime, String currTime){
-  Serial.println("timeChanged event fired!");
+  //Serial.println("timeChanged event fired!");
   displayTime();
   if(currTime == alarmTime){
     if(doAlarm == true){
@@ -704,8 +707,8 @@ void timeChanged(String prevTime, String currTime){
  * Event for change of date weekDay, day de Month de Year
  */
 void dateChanged(String prevDate, String currDate){
-  Serial.print("dateChanged event fired! ");
-  Serial.println(currDate);
+  //Serial.print("dateChanged event fired! ");
+  //Serial.println(currDate);
   displayDate();
   //New day, lets check for the next alarm
   checkAlarm();
@@ -715,7 +718,7 @@ void dateChanged(String prevDate, String currDate){
  */
 void luxChanged(uint16_t prevLux, uint16_t currLux){
   //Serial.print("luxChanged event fired! ");
-  Serial.println(currLux);
+  //Serial.println(currLux);
   displayLux();
   calculateAndSetBGLuminosity(currLux);
 }
@@ -724,15 +727,15 @@ void luxChanged(uint16_t prevLux, uint16_t currLux){
  * Event for change of temperature
  */
 void tempChanged(float prevTemp, float currTemp){
-  Serial.println("tempChanged event fired!");
-  Serial.println(currTemp);
+  //Serial.print("tempChanged event fired! ");
+  //Serial.println(currTemp);
   displayTemp();
 }
 /**
  * Event for change of humidity
  */
 void humiChanged(float prevHumi, float currHumi){
-  Serial.println("humiChanged event fired!");
+  //Serial.println("humiChanged event fired!");
   displayHumi();
   
 }
@@ -865,7 +868,7 @@ String configExecute(String instruction){
   int setValue;
   command = instruction.substring(0, 3);
   item = instruction.substring(3, 9);
-  
+  Serial.print("Remote config: ");Serial.println(instruction);
   if(command == "GET"){
       value = getConfigValue(item);
   }else if(command == "SET"){
@@ -873,6 +876,10 @@ String configExecute(String instruction){
       value = setConfigValue(item, setValue);
   }else if(command == "RST"){
       ESP.restart();  
+  }else if(command == "TSS"){
+      onAlarm = false;
+      doAlarm = false;  
+      displayAlarm();
   }else{
       value = "Invalid command";
   }
@@ -1183,6 +1190,26 @@ void setDoAlarm(byte value){
     doAlarm = true;
   }else{
     doAlarm = false;
+  }
+  displayAlarm();
+}
+/* onAlarm
+ * Address --- Not stored into EEPROM
+ */
+byte getOnAlarm(){
+  byte value;
+  if(onAlarm == true){
+    value = 1;
+  }else{
+    value = 0;
+  }
+  return value;
+}
+void setOnAlarm(byte value){
+  if(value == 1){
+    onAlarm = true;
+  }else{
+    onAlarm = false;
   }
   displayAlarm();
 }
