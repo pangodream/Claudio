@@ -161,7 +161,7 @@ void setup() {
   yield();
   tft.setTextSize(4);
   tft.setTextColor(ILI9341_LORANGE);
-  tft.println("Waky system");
+  tft.println("Claudio!");
   tft.setTextSize(1);
   tft.setTextColor(ILI9341_WHITE);
   tft.println("");
