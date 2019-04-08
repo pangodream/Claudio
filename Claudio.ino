@@ -210,14 +210,21 @@ void setup() {
   waitTouch(bootWait);
 
   //Prepare screen for normal operation
+  setBGLuminosity(0);
   tft.fillScreen(ILI9341_BLACK);
   yield();
 
-  //Display touch buttons
+  //Paint elements
+  displayTime();
+  displayDate();
+  displayAlarm();
+  displayTemp();
+  displayHumi();
+  displayLux();
   displayButton(0, false, false);
   displayButton(1, false, false);
   displayButton(2, false, false);
-  
+  setBGLuminosity(255);
   /** 
    *  TESTING
    */
@@ -564,7 +571,24 @@ uint16_t getCurrentLux(){
   }
   return currLux;
 }
-
+/**
+ * Calculates and sets screen backlight brightness
+ */
+void calculateAndSetBGLuminosity(uint16_t currLux){
+  int finalLux = currLux;
+  if(finalLux > maxLux){
+    finalLux = maxLux;
+  }
+  if(finalLux < minLux){
+    finalLux = minLux;
+  }
+  double levelsWidth = maxLux - minLux;
+  double level = finalLux - minLux;
+  double ratio = level / levelsWidth;
+  double brightnessWidth = 255 - minBrightness;
+  int brightnessValue = (brightnessWidth * ratio) + minBrightness;
+  setBGLuminosity(brightnessValue);
+}
 /**
  * Returns temperature
  */
@@ -693,21 +717,9 @@ void luxChanged(uint16_t prevLux, uint16_t currLux){
   //Serial.print("luxChanged event fired! ");
   Serial.println(currLux);
   displayLux();
-
-  int finalLux = currLux;
-  if(finalLux > maxLux){
-    finalLux = maxLux;
-  }
-  if(finalLux < minLux){
-    finalLux = minLux;
-  }
-  double levelsWidth = maxLux - minLux;
-  double level = finalLux - minLux;
-  double ratio = level / levelsWidth;
-  double brightnessWidth = 255 - minBrightness;
-  int brightnessValue = (brightnessWidth * ratio) + minBrightness;
-  setBGLuminosity(brightnessValue);
+  calculateAndSetBGLuminosity(currLux);
 }
+
 /**
  * Event for change of temperature
  */
@@ -1088,6 +1100,7 @@ void setMaxLux(byte value){
   EEPROM.write(8, value);
   EEPROM.commit();
   maxLux = value;
+  calculateAndSetBGLuminosity(currLux);
 }
 /* minLux
  * Address 9
@@ -1103,6 +1116,7 @@ void setMinLux(byte value){
   EEPROM.write(9, value);
   EEPROM.commit();
   minLux = value;
+  calculateAndSetBGLuminosity(currLux);
 }
 /* minBrightness
  * Address 10
@@ -1118,6 +1132,7 @@ void setMinBrightness(byte value){
   EEPROM.write(10, value);
   EEPROM.commit();
   minBrightness = value;
+  calculateAndSetBGLuminosity(currLux);
 }
 /* alarmHour
  * Address 11
