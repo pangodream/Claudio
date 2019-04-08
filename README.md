@@ -15,6 +15,8 @@ Folders:
 
 More info and demos at: https://www.youtube.com/watch?v=NURag-YYxIY
 
+# WIRING DIAGRAM
+![Claudio Main Screen](https://raw.githubusercontent.com/pangodream/Claudio/master/hardware/Claudio_Wiring_Diagram.png)
 
 # REMOTE CONFIGURATION
 By default, Claudio is listening on port 1234 for incoming connections. 
