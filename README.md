@@ -192,3 +192,7 @@ Indicates whether the alarm is beeping or not. As well, it stops alarm beeping i
 EEPROM stored: No
 
 Default value: No default value
+
+
+To test remote configuration capabilities you can use Claudio Remote, an Android app to change configuration values easily:
+https://github.com/pangodream/ClaudioRemote
