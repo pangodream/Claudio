@@ -874,6 +874,8 @@ String configExecute(String instruction){
   }else if(command == "SET"){
       setValue = instruction.substring(9, 12).toInt();
       value = setConfigValue(item, setValue);
+  }else if(command == "ALL"){
+      value = getAllItems();   
   }else if(command == "RST"){
       ESP.restart();  
   }else if(command == "TSS"){
@@ -915,6 +917,8 @@ String getConfigValue(String item){
     value = (String) getAlarmMinute();
   }else if(item == "DOALAR"){
     value = (String) getDoAlarm();  
+  }else if(item == "ONALAR"){
+    value = (String) getOnAlarm();    
   }else{
     value = "Invalid item";
   }  
@@ -949,11 +953,80 @@ String setConfigValue(String item, int setValue){
   }else if(item == "ALARMI"){
     setAlarmMinute(setValue);
   }else if(item == "DOALAR"){
-    setDoAlarm(setValue);  
+    setDoAlarm(setValue);
+  }else if(item == "ONALAR"){
+    setOnAlarm(setValue);    
   }else{
     value = "Invalid item";
   }  
   return value;
+}
+String getAllItems(){
+  String result = "";
+  result = result + "BOOTWT";
+  result = result + (String) getBootWait();
+  result = result + ";";
+  result = result + "TOUCHR";
+  result = result + (String) getTouchReadings();
+  result = result + ";";
+  result = result + "THTCHR";
+  result = result + (String) getThresholdTouchR();
+  result = result + ";";
+  result = result + "THTCHM";
+  result = result + (String) getThresholdTouchM();
+  result = result + ";";
+  result = result + "THTCHL";
+  result = result + (String) getThresholdTouchL();
+  result = result + ";";
+  result = result + "LTCHTH";
+  result = result + (String) getLongTouchThreshold();
+  result = result + ";";
+  result = result + "SNZMIN";
+  result = result + (String) getSnoozeMinutes();
+  result = result + ";";
+  result = result + "ALBEEP";
+  result = result + (String) getAlarmBeeps();
+  result = result + ";";
+  result = result + "MAXLUX";
+  result = result + (String) getMaxLux();
+  result = result + ";";
+  result = result + "MINLUX";
+  result = result + (String) getMinLux();
+  result = result + ";";
+  result = result + "MINBRG";
+  result = result + (String) getMinBrightness();
+  result = result + ";";
+  result = result + "ALARHO";
+  result = result + (String) getAlarmHour();
+  result = result + ";";
+  result = result + "ALARMI";
+  result = result + (String) getAlarmMinute();
+  result = result + ";";
+  result = result + "DOALAR";
+  result = result + (String) getDoAlarm();   
+  result = result + ";";
+  result = result + "ONALAR";
+  result = result + (String) getOnAlarm();   
+  result = result + ";";
+  result = result + "CURTIM";
+  result = result + currTime;   
+  result = result + ";";
+  result = result + "CURDAT";
+  result = result + currDate;   
+  result = result + ";";
+  result = result + "ALARTM";
+  result = result + alarmTime;   
+  result = result + ";";
+  result = result + "CURTMP";
+  result = result + (String) currTemp;   
+  result = result + ";";
+  result = result + "CURHUM";
+  result = result + (String) currHumi;   
+  result = result + ";";
+  result = result + "CURLUX";
+  result = result + (String) currLux;   
+  result = result + ";";
+  return result;
 }
 
 /**

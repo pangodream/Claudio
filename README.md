@@ -52,6 +52,14 @@ Retrieves the value of the specified item.
 **SET**
 Stores the specified value in the specified item.
 
+**GET**
+Retrieves all the items value in a concatenated string ITEM1 + VALUE1 + ; + ... + ITEMn + VALUEn + ; 
+
+For instance:
+```bash
+BOOTWT5;TOUCHR120;THTCHR70;THTCHM65;THTCHL65;LTCHTH12;...
+```
+
 **RST**
 Reboot the system.
 
@@ -172,6 +180,14 @@ Default value: No default value
 **DOALAR**
 
 Switch ON/OFF alarm by sending 1/0 value for this item
+
+EEPROM stored: No
+
+Default value: No default value
+
+**ONALAR**
+
+Indicates whether the alarm is beeping or not. As well, it stops alarm beeping if its value is set to 0
 
 EEPROM stored: No
 
